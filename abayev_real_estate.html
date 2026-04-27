@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נדל"ן ABAYEV - אפרת אבייב</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; direction: rtl; }
+        
+        .header { 
+            background: #6b2a5a; 
+            color: white; 
+            padding: 1.5rem 1.25rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .header-content { 
+            text-align: center; 
+            flex: 1; 
+        }
+        
+        .header h1 { 
+            font-size: 24px; 
+            font-weight: 700; 
+            margin-bottom: 0.25rem; 
+        }
+        
+        .header p { 
+            font-size: 13px; 
+            opacity: 0.9; 
+        }
+        
+        .logo-btn { 
+            width: 48px; 
+            height: 48px; 
+            background: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 28px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 0.3s; 
+        }
+        
+        .logo-btn:hover { 
+            transform: scale(1.05); 
+        }
+        
+        .sidebar-info { 
+            background: white; 
+            padding: 1rem 1.25rem; 
+            border-bottom: 1px solid #eee; 
+            text-align: right; 
+        }
+        
+        .sidebar-info h3 { 
+            font-size: 15px; 
+            font-weight: 600; 
+            color: #6b2a5a; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .sidebar-info p { 
+            font-size: 13px; 
+            color: #666; 
+            line-height: 1.5; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .sidebar-info .phone { 
+            font-weight: 500; 
+            color: #333; 
+        }
+        
+        .nav-tabs { 
+            display: flex; 
+            gap: 0; 
+            border-bottom: 0.5px solid #ddd; 
+            background: white; 
+        }
+        
+        .nav-tabs button { 
+            flex: 1; 
+            padding: 1rem 0.75rem; 
+            border: none; 
+            background: none; 
+            font-size: 14px; 
+            font-weight: 500; 
+            color: #666; 
+            cursor: pointer; 
+            border-bottom: 2px solid transparent; 
+            transition: all 0.2s; 
+        }
+        
+        .nav-tabs button.active { 
+            color: #6b2a5a; 
+            border-bottom-color: #6b2a5a; 
+        }
+        
+        .nav-tabs button:hover { 
+            background: #f9f9f9; 
+        }
+        
+        .tab-content { 
+            padding: 1.25rem; 
+        }
+        
+        .tab-pane { 
+            display: none; 
+        }
+        
+        .tab-pane.active { 
+            display: block; 
+        }
+        
+        .property-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1rem; 
+        }
+        
+        .property-card { 
+            background: white; 
+            border: 0.5px solid #ddd; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            transition: all 0.3s; 
+            cursor: pointer; 
+        }
+        
+        .property-card:hover { 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1); 
+        }
+        
+        .property-image { 
+            width: 100%; 
+            height: 200px; 
+            background: linear-gradient(135deg, #8b4373, #6b2a5a); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 48px; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        
+        .property-image img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        
+        .action-btns { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            display: none; 
+            gap: 6px; 
+        }
+        
+        .property-card.editable:hover .action-btns { 
+            display: flex; 
+        }
+        
+        .action-btn { 
+            background: rgba(255,255,255,0.95); 
+            border: none; 
+            padding: 8px 12px; 
+            border-radius: 6px; 
+            font-size: 12px; 
+            font-weight: 500; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        
+        .delete-btn { 
+            background: #E24B4A; 
+            color: white; 
+        }
+        
+        .delete-btn:hover { 
+            background: #c23635; 
+        }
+        
+        .edit-btn { 
+            background: #6b2a5a; 
+            color: white; 
+        }
+        
+        .edit-btn:hover { 
+            background: #542145; 
+        }
+        
+        .property-info { 
+            padding: 1.25rem; 
+        }
+        
+        .property-price { 
+            font-size: 22px; 
+            font-weight: 600; 
+            color: #6b2a5a; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .property-title { 
+            font-size: 16px; 
+            font-weight: 500; 
+            margin-bottom: 0.75rem; 
+        }
+        
+        .property-details { 
+            font-size: 13px; 
+            color: #666; 
+            line-height: 1.6; 
+        }
+        
+        .detail-modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 200; 
+            overflow-y: auto; 
+        }
+        
+        .detail-modal.show { 
+            display: block; 
+        }
+        
+        .detail-content { 
+            background: white; 
+            margin: 2rem 0; 
+        }
+        
+        .detail-close { 
+            position: fixed; 
+            top: 20px; 
+            left: 20px; 
+            background: white; 
+            border: none; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            font-size: 24px; 
+            cursor: pointer; 
+            z-index: 201; 
+        }
+        
+        .detail-image { 
+            width: 100%; 
+            height: 300px; 
+            background: linear-gradient(135deg, #8b4373, #6b2a5a); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+        }
+        
+        .detail-image img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        
+        .detail-info { 
+            padding: 2rem 1.25rem; 
+        }
+        
+        .detail-info h2 { 
+            font-size: 28px; 
+            font-weight: 600; 
+            color: #6b2a5a; 
+            margin-bottom: 1rem; 
+        }
+        
+        .detail-info p { 
+            font-size: 15px; 
+            color: #666; 
+            line-height: 1.8; 
+            margin-bottom: 1rem; 
+        }
+        
+        .login-modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 100; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 400px; 
+        }
+        
+        .login-modal.show { 
+            display: flex; 
+        }
+        
+        .login-box { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            width: 85%; 
+            max-width: 350px; 
+        }
+        
+        .login-box h2 { 
+            font-size: 18px; 
+            margin-bottom: 1.5rem; 
+            text-align: center; 
+        }
+        
+        .form-group { 
+            margin-bottom: 1rem; 
+        }
+        
+        .form-group label { 
+            display: block; 
+            font-size: 14px; 
+            font-weight: 500; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .form-group input { 
+            width: 100%; 
+            padding: 0.75rem; 
+            border: 0.5px solid #ddd; 
+            border-radius: 6px; 
+            font-size: 14px; 
+        }
+        
+        .btn-login { 
+            width: 100%; 
+            padding: 0.75rem; 
+            background: #6b2a5a; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 15px; 
+            font-weight: 500; 
+            cursor: pointer; 
+        }
+        
+        .form-container { 
+            background: white; 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            border: 0.5px solid #ddd; 
+        }
+        
+        .form-group textarea { 
+            width: 100%; 
+            padding: 0.75rem; 
+            border: 0.5px solid #ddd; 
+            border-radius: 6px; 
+            font-family: inherit; 
+            font-size: 14px; 
+            resize: vertical; 
+            min-height: 60px; 
+        }
+        
+        .file-input-wrapper { 
+            position: relative; 
+            overflow: hidden; 
+            display: block; 
+        }
+        
+        .file-input-wrapper input[type="file"] { 
+            position: absolute; 
+            left: -9999px; 
+        }
+        
+        .file-input-label { 
+            background: #f9f9f9; 
+            border: 1px dashed #6b2a5a; 
+            border-radius: 6px; 
+            padding: 1rem; 
+            text-align: center; 
+            cursor: pointer; 
+            font-size: 14px; 
+            color: #666; 
+            transition: all 0.2s; 
+        }
+        
+        .file-input-label:hover { 
+            background: #f0f0f0; 
+        }
+        
+        .image-preview { 
+            width: 100%; 
+            height: 180px; 
+            background: #f0f0f0; 
+            border-radius: 6px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            margin-top: 0.5rem; 
+        }
+        
+        .image-preview img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        
+        .btn-group { 
+            display: flex; 
+            gap: 8px; 
+            margin-top: 1.5rem; 
+        }
+        
+        .btn-primary { 
+            flex: 1; 
+            padding: 0.75rem; 
+            background: #6b2a5a; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 15px; 
+            font-weight: 500; 
+            cursor: pointer; 
+        }
+        
+        .btn-secondary { 
+            flex: 1; 
+            padding: 0.75rem; 
+            background: #f0f0f0; 
+            color: #333; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 15px; 
+            font-weight: 500; 
+            cursor: pointer; 
+        }
+        
+        .btn-logout { 
+            float: left; 
+            padding: 0.6rem 1rem; 
+            background: #E24B4A; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 13px; 
+            cursor: pointer; 
+            margin-bottom: 1rem; 
+        }
+        
+        .empty-state { 
+            text-align: center; 
+            padding: 2rem 1rem; 
+            color: #999; 
+        }
+        
+        .empty-state-icon { 
+            font-size: 48px; 
+            margin-bottom: 1rem; 
+        }
+
+        @media (max-width: 480px) {
+            .header { padding: 1rem 1rem; }
+            .header h1 { font-size: 20px; }
+            .property-image { height: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+<div style="min-height: 100vh; display: flex; flex-direction: column;">
+    <div class="header">
+        <div class="header-content">
+            <h1>נדל"ן ABAYEV</h1>
+            <p>מתווכת נדלן מקצועית</p>
+        </div>
+        <button class="logo-btn" onclick="openAdminLogin()">⚙️</button>
+    </div>
+
+    <div class="sidebar-info">
+        <h3>יצירת קשר</h3>
+        <p><strong>אפרת אבייב</strong></p>
+        <p>מתווכת נדלן</p>
+        <p class="phone">052-959-1089</p>
+    </div>
+
+    <div id="loginModal" class="login-modal">
+        <div class="login-box">
+            <h2>כניסה למנהל</h2>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>סיסמה</label>
+                    <input type="password" id="adminPass" placeholder="הזן סיסמה" required>
+                </div>
+                <button type="submit" class="btn-login">כניסה</button>
+            </form>
+            <button onclick="closeAdminLogin()" type="button" style="width: 100%; margin-top: 0.75rem; padding: 0.75rem; background: #f0f0f0; border: none; border-radius: 6px; cursor: pointer;">ביטול</button>
+        </div>
+    </div>
+
+    <div id="detailModal" class="detail-modal" onclick="closeDetail(event)">
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+        <div class="detail-content" onclick="event.stopPropagation()">
+            <div class="detail-image" id="detailImage"></div>
+            <div class="detail-info">
+                <h2 id="detailTitle"></h2>
+                <p style="font-size: 20px; color: #6b2a5a; font-weight: 600; margin-bottom: 1.5rem;" id="detailPrice"></p>
+                <p id="detailDetails"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="appContent" style="flex: 1;">
+        <div id="viewerMode">
+            <div class="nav-tabs">
+                <button class="active">הנכסים שלנו</button>
+            </div>
+            <div class="tab-content">
+                <div id="propertiesList" class="property-grid"></div>
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">🏠</div>
+                    <p>אין נכסים זמינים כרגע</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="adminMode" style="display: none;">
+            <button class="btn-logout" onclick="exitAdmin()">התנתקות</button>
+            <div style="clear: both;"></div>
+            <div class="nav-tabs">
+                <button class="active" onclick="switchTab(event, 'view')">תצוגה</button>
+                <button onclick="switchTab(event, 'add')">הוסף</button>
+                <button onclick="switchTab(event, 'edit')">ערוך</button>
+            </div>
+
+            <div class="tab-content">
+                <div id="view" class="tab-pane active"></div>
+
+                <div id="add" class="tab-pane">
+                    <div class="form-container">
+                        <h2 style="font-size: 18px; margin-bottom: 1.5rem;">הוסף נכס חדש</h2>
+                        <form id="addPropertyForm">
+                            <div class="form-group">
+                                <label>שם הנכס</label>
+                                <input type="text" id="newTitle" placeholder="דירה בתל אביב" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>מחיר (₪)</label>
+                                <input type="number" id="newPrice" placeholder="1500000" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>פרטים</label>
+                                <textarea id="newDetails" placeholder="גודל, חדרים, מאפיינים..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>תמונה</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="newImage" accept="image/*">
+                                    <label for="newImage" class="file-input-label">לחץ להעלאת תמונה 📸</label>
+                                </div>
+                                <div id="previewContainer" class="image-preview" style="display: none;">
+                                    <img id="previewImage" src="">
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn-primary">הוסף נכס</button>
+                                <button type="reset" class="btn-secondary">ניקוי</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="edit" class="tab-pane">
+                    <div class="form-container">
+                        <h2 style="font-size: 18px; margin-bottom: 1.5rem;">בחר נכס לעריכה</h2>
+                        <select id="propertySelect" onchange="loadPropertyForEdit()" style="width: 100%; padding: 0.75rem; border: 0.5px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 1.5rem;">
+                            <option value="">-- בחר נכס --</option>
+                        </select>
+
+                        <form id="editPropertyForm" style="display: none;">
+                            <div class="form-group">
+                                <label>שם הנכס</label>
+                                <input type="text" id="editTitle" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>מחיר (₪)</label>
+                                <input type="number" id="editPrice" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>פרטים</label>
+                                <textarea id="editDetails"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>תמונה</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="editImage" accept="image/*">
+                                    <label for="editImage" class="file-input-label">לחץ להחלפת תמונה 📸</label>
+                                </div>
+                                <div id="editPreviewContainer" class="image-preview">
+                                    <img id="editPreviewImage" src="">
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn-primary">שמור שינויים</button>
+                                <button type="reset" class="btn-secondary">ביטול</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let properties = JSON.parse(localStorage.getItem('properties')) || [];
+let isAdmin = false;
+let editingId = null;
+const ADMIN_PASSWORD = '1607';
+
+function openAdminLogin() {
+    document.getElementById('loginModal').classList.add('show');
+    document.getElementById('adminPass').focus();
+}
+
+function closeAdminLogin() {
+    document.getElementById('loginModal').classList.remove('show');
+}
+
+function handleAdminLogin(e) {
+    e.preventDefault();
+    if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+        isAdmin = true;
+        closeAdminLogin();
+        showAdminMode();
+    } else {
+        alert('סיסמה שגויה');
+    }
+}
+
+function exitAdmin() {
+    isAdmin = false;
+    document.getElementById('adminMode').style.display = 'none';
+    document.getElementById('viewerMode').style.display = 'block';
+    renderProperties();
+}
+
+function showAdminMode() {
+    document.getElementById('viewerMode').style.display = 'none';
+    document.getElementById('adminMode').style.display = 'block';
+    renderProperties();
+    updatePropertySelect();
+}
+
+function switchTab(event, tabName) {
+    document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    document.querySelectorAll('#adminMode .nav-tabs button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function saveProperties() {
+    localStorage.setItem('properties', JSON.stringify(properties));
+    renderProperties();
+}
+
+function renderProperties() {
+    const container = isAdmin ? document.getElementById('view') : document.getElementById('propertiesList');
+    
+    if (properties.length === 0) {
+        container.innerHTML = '<div class="property-grid"><div id="emptyState" class="empty-state"><div class="empty-state-icon">🏠</div><p>אין נכסים</p></div></div>';
+        return;
+    }
+
+    const grid = '<div class="property-grid">' + properties.map((prop, i) => `
+        <div class="property-card ${isAdmin ? 'editable' : ''}" onclick="${isAdmin ? '' : 'showDetail(' + i + ')'}">
+            <div class="property-image">
+                ${prop.image ? `<img src="${prop.image}">` : '🏠'}
+                ${isAdmin ? `<div class="action-btns"><button class="action-btn edit-btn" onclick="event.stopPropagation(); quickEdit(${i})">ערוך</button><button class="action-btn delete-btn" onclick="event.stopPropagation(); deleteProp(${i})">מחק</button></div>` : ''}
+            </div>
+            <div class="property-info">
+                <div class="property-price">₪ ${parseInt(prop.price).toLocaleString('he-IL')}</div>
+                <div class="property-title">${prop.title}</div>
+                <div class="property-details">${prop.details}</div>
+            </div>
+        </div>
+    `).join('') + '</div>';
+    
+    container.innerHTML = grid;
+}
+
+function showDetail(i) {
+    const p = properties[i];
+    document.getElementById('detailImage').innerHTML = p.image ? `<img src="${p.image}">` : '🏠';
+    document.getElementById('detailTitle').textContent = p.title;
+    document.getElementById('detailPrice').textContent = '₪ ' + parseInt(p.price).toLocaleString('he-IL');
+    document.getElementById('detailDetails').textContent = p.details;
+    document.getElementById('detailModal').classList.add('show');
+}
+
+function closeDetail(e) {
+    if (e && e.target !== document.getElementById('detailModal')) return;
+    document.getElementById('detailModal').classList.remove('show');
+}
+
+function deleteProp(i) {
+    if (confirm('למחוק את הנכס?')) {
+        properties.splice(i, 1);
+        saveProperties();
+    }
+}
+
+function quickEdit(i) {
+    document.getElementById('propertySelect').value = i;
+    loadPropertyForEdit();
+    switchTab({target: document.querySelectorAll('#adminMode .nav-tabs button')[2]}, 'edit');
+}
+
+function updatePropertySelect() {
+    const s = document.getElementById('propertySelect');
+    s.innerHTML = '<option value="">-- בחר --</option>' + properties.map((p, i) => `<option value="${i}">${p.title}</option>`).join('');
+}
+
+document.getElementById('newImage').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (f) {
+        const r = new FileReader();
+        r.onload = ev => {
+            document.getElementById('previewImage').src = ev.target.result;
+            document.getElementById('previewContainer').style.display = 'flex';
+        };
+        r.readAsDataURL(f);
+    }
+});
+
+document.getElementById('editImage').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (f) {
+        const r = new FileReader();
+        r.onload = ev => {
+            document.getElementById('editPreviewImage').src = ev.target.result;
+        };
+        r.readAsDataURL(f);
+    }
+});
+
+document.getElementById('addPropertyForm').addEventListener('submit', e => {
+    e.preventDefault();
+    properties.push({
+        title: document.getElementById('newTitle').value,
+        price: document.getElementById('newPrice').value,
+        details: document.getElementById('newDetails').value,
+        image: document.getElementById('previewImage').src || ''
+    });
+    saveProperties();
+    e.target.reset();
+    document.getElementById('previewContainer').style.display = 'none';
+    alert('נכס הוסף!');
+});
+
+function loadPropertyForEdit() {
+    const i = document.getElementById('propertySelect').value;
+    const f = document.getElementById('editPropertyForm');
+    if (i === '') {
+        f.style.display = 'none';
+        return;
+    }
+    editingId = i;
+    const p = properties[i];
+    document.getElementById('editTitle').value = p.title;
+    document.getElementById('editPrice').value = p.price;
+    document.getElementById('editDetails').value = p.details;
+    document.getElementById('editPreviewImage').src = p.image || '';
+    f.style.display = 'block';
+}
+
+document.getElementById('editPropertyForm').addEventListener('submit', e => {
+    e.preventDefault();
+    properties[editingId] = {
+        title: document.getElementById('editTitle').value,
+        price: document.getElementById('editPrice').value,
+        details: document.getElementById('editDetails').value,
+        image: document.getElementById('editPreviewImage').src || properties[editingId].image
+    };
+    saveProperties();
+    alert('נכס עודכן!');
+    document.getElementById('editPropertyForm').style.display = 'none';
+    document.getElementById('propertySelect').value = '';
+});
+
+renderProperties();
+</script>
+
+</body>
+</html>
